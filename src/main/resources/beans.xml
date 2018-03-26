@@ -1,0 +1,35 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" 
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+   <!-- Initialization for data source -->
+   <bean id="dataSource" 
+      class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
+      <property name = "url" value = "jdbc:mysql://104.145.233.100/mihabitat_baserep"/>
+      <property name = "username" value = "mihabitat-demo"/>
+      <property name = "password" value = "J7d/s851hT$9aS4"/>
+   </bean>
+
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id = "loginDao" 
+      class = "com.bstmexico.mihabitat_ws.dao.impl.LoginDaoImpl">
+      <property name = "dataSource" ref = "dataSource" /> 
+      </bean>
+      
+    <bean id = "departamentoDao" 
+      class = "com.bstmexico.mihabitat_ws.dao.impl.DepartamentoDaoImpl">
+      <property name = "dataSource" ref = "dataSource" /> 
+         
+   </bean>
+   
+   <bean id = "historicosDao" 
+      class = "com.bstmexico.mihabitat_ws.dao.impl.HistoricosDaoImpl">
+      <property name = "dataSource" ref = "dataSource" /> 
+         
+   </bean>
+
+      
+</beans>
