@@ -1,6 +1,5 @@
 package com.bstmexico.mihabitat_ws;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +7,6 @@ import java.util.Map;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,19 +17,15 @@ import com.bstmexico.mihabitat_ws.dao.DepartamentoDao;
 import com.bstmexico.mihabitat_ws.dao.HistoricosDao;
 import com.bstmexico.mihabitat_ws.dao.LoginDAO;
 import com.bstmexico.mihabitat_ws.model.Departamento;
-import com.bstmexico.mihabitat_ws.model.HistorialMensual;
 import com.bstmexico.mihabitat_ws.model.PendientesPago;
 import com.bstmexico.mihabitat_ws.model.Persona;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 /**
  * Hello world!
  *
@@ -67,8 +61,10 @@ class GreetingController {
 	@Autowired 
 	private HistoricosDao historicosDao;
 	
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @RequestMapping("/login")
-  public Map greeting(@RequestParam(value="name") String name, @RequestParam(value="password") String password) throws JSONException {       
+  public Map greeting(@RequestParam(value="name") String name, 
+		  @RequestParam(value="password") String password) throws JSONException {       
   	//se indica para que el dao sepa que datasource usar
   	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
   	loginDao = (LoginDAO) context.getBean("loginDao");
@@ -79,7 +75,8 @@ class GreetingController {
   	return mapa;    
       }
   
-  @RequestMapping("/getTorreyEtiquetas")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+@RequestMapping("/getTorreyEtiquetas")
   public Map getTorre(@RequestParam(value="departamento") String idDepartamento) throws JSONException{
   	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
     	departamentoDao = (DepartamentoDao) context.getBean("departamentoDao");
@@ -89,7 +86,8 @@ class GreetingController {
   	return mapa;
   }
   
-  @RequestMapping("/departamentosUsuarios")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
+@RequestMapping("/departamentosUsuarios")
   public Map getDepartamentos(@RequestParam(value="idPersona") String persona) throws JSONException{
     	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
     	departamentoDao = (DepartamentoDao) context.getBean("departamentoDao");
@@ -106,6 +104,7 @@ class GreetingController {
  
   }
   
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @RequestMapping("/getSaldoaFavor")
   public Map getSaldoaFavor(@RequestParam(value="idDepartamento") String idDepartamento) throws JSONException{
   	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
@@ -115,28 +114,8 @@ class GreetingController {
       mapa.put("saldoFavor", saldoFavor);
   	return mapa;   
   }
-  
-  @RequestMapping("/getAdeudoTotal")
-  public Map getAdeudoTotal(@RequestParam(value="idDepartamento") String idDepartamento) throws JSONException{
-  	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    	Map mapa = new HashMap<>();
-  	return mapa;   
-  }
-  
-  
-  @RequestMapping("/getHistorialMensual")
-  public Map getHistorialMensual(@RequestParam(value="idDepartamento") String idDepartamento,
-  		@RequestParam(value="fechaInicio", required=false) String fechaInicio, 
-  		@RequestParam(value="fechaFin", required=false) String fechaFin) throws JSONException{
-  	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    	Map mapa = new HashMap<>();
-    	List<HistorialMensual> historico = new ArrayList<HistorialMensual>();
-
-    	mapa.put("movimientos", historico);
-  	return mapa;   
-  }
-  
-  
+     
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   @RequestMapping("/getPendientesPago")
   public Map getPendientesPago(@RequestParam(value="idDepartamento") String idDepartamento) throws JSONException{
   	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
@@ -148,24 +127,9 @@ class GreetingController {
   }
   
 
-  @RequestMapping("/getHistorialCargos")
-  public Map getHistorialCargos(@RequestParam(value="idDepartamento") String idDepartamento,
-  		@RequestParam(value="fechaInicio") String fechaInicio, 
-  		@RequestParam(value="fechaFin") String fechaFin) throws JSONException{
-  	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    	Map mapa = new HashMap<>();
 
-  	return mapa;   
-  }
   
 
-  @RequestMapping("/getHistorialAbonos")
-  public Map getHistorialAbonos(@RequestParam(value="idDepartamento") String idDepartamento,
-  		@RequestParam(value="fechaInicio") String fechaInicio, 
-  		@RequestParam(value="fechaFin") String fechaFin) throws JSONException{
-  	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    	Map mapa = new HashMap<>();
-  	return mapa;   
-  }
+
   
 }
