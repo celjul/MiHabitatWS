@@ -1,7 +1,82 @@
 package com.bstmexico.mihabitat_ws.model;
 
+import java.util.Collection;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+
+@Entity
+@Table(name = "tpersonas")
 public class Persona {
+
+	private static final long serialVersionUID = -7395525800007747060L;
 	
+	@Size(max = 64)
+	@Column(name = "VApellidoMaterno", nullable = true, length = 64)
+	protected String apellidoMaterno;
+
+	@NotNull
+	@Size(min = 1, max = 64)
+	@Column(name = "VApellidoPaterno", nullable = false, length = 64)
+	protected String apellidoPaterno;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "NIdPersona", nullable = false, unique = true)
+	protected Long id;
+
+	@NotNull
+	@Size(min = 1, max = 64)
+	@Column(name = "VNombre", nullable = false, length = 64)
+	protected String nombre;
+
+	public String getApellidoMaterno() {
+		return apellidoMaterno == null ? "" : apellidoMaterno;
+	}
+
+	public void setApellidoMaterno(String apellidoMaterno) {
+		this.apellidoMaterno = apellidoMaterno;
+	}
+
+	public String getApellidoPaterno() {
+		return apellidoPaterno;
+	}
+
+	public void setApellidoPaterno(String apellidoPaterno) {
+		this.apellidoPaterno = apellidoPaterno;
+	}
+
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+
+
+	/*
 	private String nombre;
 	
 	private String apPaterno;
@@ -84,5 +159,5 @@ public class Persona {
 	}
 	
 	
-
+*/
 }

@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bstmexico.mihabitat_ws.dao.DepartamentoDao;
+import com.bstmexico.mihabitat_ws.dao.DepartamentoDaoHibernate;
 import com.bstmexico.mihabitat_ws.dao.HistoricosDao;
 import com.bstmexico.mihabitat_ws.dao.LoginDAO;
+import com.bstmexico.mihabitat_ws.model.CatalogoRolUsuarios;
 import com.bstmexico.mihabitat_ws.model.Departamento;
+import com.bstmexico.mihabitat_ws.model.Departamentos;
 import com.bstmexico.mihabitat_ws.model.PendientesPago;
 import com.bstmexico.mihabitat_ws.model.Persona;
+import com.bstmexico.mihabitat_ws.model.Usuarios;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -60,20 +64,20 @@ class GreetingController {
 	
 	@Autowired 
 	private HistoricosDao historicosDao;
-	
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-  @RequestMapping("/login")
-  public Map greeting(@RequestParam(value="name") String name, 
-		  @RequestParam(value="password") String password) throws JSONException {       
-  	//se indica para que el dao sepa que datasource usar
-  	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-  	loginDao = (LoginDAO) context.getBean("loginDao");
-      Persona persona = new Persona();
-      persona= loginDao.checkLogin(name, password);
-      Map mapa = new HashMap<>();
-      mapa.put("persona", persona);
-  	return mapa;    
-      }
+	  
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping("/login")
+	public Map login(
+		  @RequestParam(value="user") String user,
+		  @RequestParam(value="password") String password) throws JSONException {
+	  	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+	  	loginDao = context.getBean(LoginDAO.class);
+	    Usuarios usuario = new Usuarios();
+	    usuario= loginDao.checkLogin(user, password);
+	    Map mapa = new HashMap<>();
+	    mapa.put("Usuario", usuario);
+	    return mapa;    
+    }
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
 @RequestMapping("/getTorreyEtiquetas")
@@ -123,13 +127,21 @@ class GreetingController {
     	Map mapa = new HashMap<>();
     	List<PendientesPago> pendientespago = historicosDao.getPendientesPago(Integer.valueOf(idDepartamento));
     	mapa.put("pendientes", pendientespago);
+  
   	return mapa;   
   }
   
 
-
-  
-
-
-  
+@RequestMapping("/getDepartamentosCollection")
+public Map getDepartamentosCollection() {
+	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+	DepartamentoDaoHibernate personDAO = context.getBean(DepartamentoDaoHibernate.class);
+	Departamentos person = new Departamentos();
+	List<Departamentos> list = personDAO.list();
+	//close resources
+	context.close();	
+	Map mapa = new HashMap<>();
+	mapa.put("Departamentos", list);
+  	return mapa;   
+}
 }
