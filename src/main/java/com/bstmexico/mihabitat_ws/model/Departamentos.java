@@ -1,105 +1,143 @@
 package com.bstmexico.mihabitat_ws.model;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="tdepartamentos")
-public class Departamentos {
+@Table(name = "tdepartamentos", uniqueConstraints = { 
+		@UniqueConstraint(columnNames = {"NIdCondominio", "VNombre" }) })
+public class Departamentos implements Serializable {
+
+	private static final long serialVersionUID = -7577682341577773991L;
+
+	@NotNull
+	@Column(name = "BActivo", nullable = false)
+	private Boolean activo;
+
+	@NotNull
+	@JoinColumn(name = "NIdCondominio", nullable = false, 
+		referencedColumnName = "NIdCondominio")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	private Condominio condominio;
+
+	@Valid
+	@OneToMany(fetch = FetchType.LAZY, 
+		mappedBy = "id.departamento", orphanRemoval = true)
+	private Collection<ContactoDepartamento> contactos;
 
 	@Id
-	@Column(name="NIdDepartamento")
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int nIdDepartamento;
-	
-	@Column(name="BActivo")
-	private boolean bActivo;  
-	
-	@Column(name="Vnombre")
-	private String vnombre;
-	
-	@Column(name="VObservaciones")
-	private String vObservaciones;
-	
-	@Column(name="NIdCondominio")
-	private String nIdCondominio;
-	
-	@Column(name="NIdMantenimiento")
-	private String nIdMantenimiento;
-	
-	@Column(name="VMensajeCobro")
-	private String vMensajeCobro;
-	
-	@Column(name="NUnidadIndiviso")
-	private String nUnidadIndiviso;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "NIdDepartamento", nullable = false, unique = true)
+	private Long id;
 
-	public int getnIdDepartamento() {
-		return nIdDepartamento;
+	@NotNull
+	@Size(min = 1, max = 128)
+	@Column(length = 128, name = "VNombre", nullable = false)
+	private String nombre;
+
+	@Size(max = 512)
+	@Column(name = "VObservaciones", nullable = true)
+	private String observaciones;
+
+	@Size(max = 512)
+	@Column(name = "VMensajeCobro", nullable = true)
+	private String mensajeCobro;
+
+	@Column(name = "NUnidadIndiviso", nullable = true)
+	private BigDecimal unidadIndiviso;
+
+	public Departamentos() {
 	}
 
-	public void setnIdDepartamento(int nIdDepartamento) {
-		this.nIdDepartamento = nIdDepartamento;
-	}
-	
-	public boolean isbActivo() {
-		return bActivo;
+	public Boolean getActivo() {
+		return activo;
 	}
 
-	public void setbActivo(boolean bActivo) {
-		this.bActivo = bActivo;
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
 	}
 
-	public String getVnombre() {
-		return vnombre;
+	public Condominio getCondominio() {
+		return condominio;
 	}
 
-	public void setVnombre(String vnombre) {
-		this.vnombre = vnombre;
+	public void setCondominio(Condominio condominio) {
+		this.condominio = condominio;
 	}
 
-	public String getvObservaciones() {
-		return vObservaciones;
+	public Collection<ContactoDepartamento> getContactos() {
+		return contactos;
 	}
 
-	public void setvObservaciones(String vObservaciones) {
-		this.vObservaciones = vObservaciones;
+	public void setContactos(Collection<ContactoDepartamento> contactos) {
+		this.contactos = contactos;
 	}
 
-	public String getnIdCondominio() {
-		return nIdCondominio;
+
+	public Long getId() {
+		return id;
 	}
 
-	public void setnIdCondominio(String nIdCondominio) {
-		this.nIdCondominio = nIdCondominio;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getnIdMantenimiento() {
-		return nIdMantenimiento;
+
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setnIdMantenimiento(String nIdMantenimiento) {
-		this.nIdMantenimiento = nIdMantenimiento;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 
-	public String getvMensajeCobro() {
-		return vMensajeCobro;
+	public String getObservaciones() {
+		return observaciones;
 	}
 
-	public void setvMensajeCobro(String vMensajeCobro) {
-		this.vMensajeCobro = vMensajeCobro;
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
-	public String getnUnidadIndiviso() {
-		return nUnidadIndiviso;
+	public String getMensajeCobro() {
+		return mensajeCobro;
 	}
 
-	public void setnUnidadIndiviso(String nUnidadIndiviso) {
-		this.nUnidadIndiviso = nUnidadIndiviso;
+	public void setMensajeCobro(String mensajeCobro) {
+		this.mensajeCobro = mensajeCobro;
 	}
-	
+
+
+	public void addContacto(ContactoDepartamento contacto) {
+		if (this.contactos == null) {
+			this.contactos = new ArrayList<ContactoDepartamento>();
+		}
+		this.contactos.add(contacto);
+	}
+
+	public BigDecimal getUnidadIndiviso() { return unidadIndiviso; }
+
+	public void setUnidadIndiviso(BigDecimal unidadIndiviso) { this.unidadIndiviso = unidadIndiviso; }
+
+
 }
