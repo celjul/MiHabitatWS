@@ -2,9 +2,9 @@ package com.bstmexico.mihabitat_ws.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
 
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,20 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "tdepartamentos", uniqueConstraints = { 
-		@UniqueConstraint(columnNames = {"NIdCondominio", "VNombre" }) })
+@Table(name = "tdepartamentos")
 public class Departamentos implements Serializable {
 
 	private static final long serialVersionUID = -7577682341577773991L;
@@ -34,17 +27,16 @@ public class Departamentos implements Serializable {
 	@Column(name = "BActivo", nullable = false)
 	private Boolean activo;
 
-	@NotNull
-	@JoinColumn(name = "NIdCondominio", nullable = false, 
-		referencedColumnName = "NIdCondominio")
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	private Condominio condominio;
 
+	@JoinColumn(name = "NIdCondominio", nullable = false, unique = true)
+	@OneToOne(fetch = FetchType.EAGER, targetEntity = Condominio.class, cascade = CascadeType.ALL)
+	private Condominio condominio;
+/*
 	@Valid
 	@OneToMany(fetch = FetchType.LAZY, 
 		mappedBy = "id.departamento", orphanRemoval = true)
 	private Collection<ContactoDepartamento> contactos;
-
+*/
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "NIdDepartamento", nullable = false, unique = true)
@@ -84,7 +76,7 @@ public class Departamentos implements Serializable {
 	public void setCondominio(Condominio condominio) {
 		this.condominio = condominio;
 	}
-
+/*
 	public Collection<ContactoDepartamento> getContactos() {
 		return contactos;
 	}
@@ -92,7 +84,7 @@ public class Departamentos implements Serializable {
 	public void setContactos(Collection<ContactoDepartamento> contactos) {
 		this.contactos = contactos;
 	}
-
+*/
 
 	public Long getId() {
 		return id;
@@ -128,12 +120,12 @@ public class Departamentos implements Serializable {
 	}
 
 
-	public void addContacto(ContactoDepartamento contacto) {
+/*	public void addContacto(ContactoDepartamento contacto) {
 		if (this.contactos == null) {
 			this.contactos = new ArrayList<ContactoDepartamento>();
 		}
 		this.contactos.add(contacto);
-	}
+	}*/
 
 	public BigDecimal getUnidadIndiviso() { return unidadIndiviso; }
 

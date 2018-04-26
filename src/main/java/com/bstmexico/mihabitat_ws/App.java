@@ -57,28 +57,35 @@ public class App extends SpringBootServletInitializer {
 class GreetingController {
 	//Se liga el dao que tiene conexion a bdd
 	@Autowired
-	 private LoginDAO loginDao;
-  
-	@Autowired
-	private DepartamentoDao departamentoDao;
-	
-	@Autowired 
-	private HistoricosDao historicosDao;
-	  
+	private LoginDAO loginDao;
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/login")
 	public Map login(
-		  @RequestParam(value="user") String user,
-		  @RequestParam(value="password") String password) throws JSONException {
-	  	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-	  	loginDao = context.getBean(LoginDAO.class);
+	@RequestParam(value="user") String user,
+	@RequestParam(value="password") String password) throws JSONException {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+		loginDao = context.getBean(LoginDAO.class);
 	    Usuarios usuario = new Usuarios();
 	    usuario= loginDao.checkLogin(user, password);
 	    Map mapa = new HashMap<>();
 	    mapa.put("Usuario", usuario);
 	    return mapa;    
     }
-  
+	
+	@RequestMapping("/getDepartamentoHabitante")
+	public Map getDepartamentoHabitante(
+	@RequestParam(value="idUsuario") String idUsuario) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+		DepartamentoDaoHibernate departamentoDao = context.getBean(DepartamentoDaoHibernate.class);
+		List<Departamentos> list = departamentoDao.getbyContacto(Long.valueOf(idUsuario));
+		context.close();	
+		Map mapa = new HashMap<>();
+		mapa.put("Departamentos", list);
+	  	return mapa;   
+	}
+	
+  /*
   @SuppressWarnings({ "unchecked", "rawtypes" })
 @RequestMapping("/getTorreyEtiquetas")
   public Map getTorre(@RequestParam(value="departamento") String idDepartamento) throws JSONException{
@@ -89,25 +96,7 @@ class GreetingController {
       mapa.put("departamentos", lista);
   	return mapa;
   }
-  
-  @SuppressWarnings({ "unchecked", "rawtypes" })
-@RequestMapping("/departamentosUsuarios")
-  public Map getDepartamentos(@RequestParam(value="idPersona") String persona) throws JSONException{
-    	ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-    	departamentoDao = (DepartamentoDao) context.getBean("departamentoDao");
-      Map mapa = new HashMap<>();
-      List<Departamento> lista = departamentoDao.getDepartamentos(persona);
-      int i=0;
-      while(i<lista.size()) {
-      	 int saldoFavor = departamentoDao.getSaldoFavor(Integer.valueOf(lista.get(i).getIdDepartamento()));
-      	 lista.get(i).setSaldoFavor(saldoFavor);
-      	i++;
-      }
-      mapa.put("departamentos", lista);
-  	return mapa;    
- 
-  }
-  
+    
   @SuppressWarnings({ "unchecked", "rawtypes" })
   @RequestMapping("/getSaldoaFavor")
   public Map getSaldoaFavor(@RequestParam(value="idDepartamento") String idDepartamento) throws JSONException{
@@ -130,18 +119,5 @@ class GreetingController {
   
   	return mapa;   
   }
-  
-
-@RequestMapping("/getDepartamentosCollection")
-public Map getDepartamentosCollection() {
-	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-	DepartamentoDaoHibernate personDAO = context.getBean(DepartamentoDaoHibernate.class);
-	Departamentos person = new Departamentos();
-	List<Departamentos> list = personDAO.list();
-	//close resources
-	context.close();	
-	Map mapa = new HashMap<>();
-	mapa.put("Departamentos", list);
-  	return mapa;   
-}
+  */
 }

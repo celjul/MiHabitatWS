@@ -22,8 +22,12 @@
 				<value>com.bstmexico.mihabitat_ws.model.Departamentos</value>
 				<value>com.bstmexico.mihabitat_ws.model.Usuarios</value>
 				<value>com.bstmexico.mihabitat_ws.model.Persona</value>
+				<value>com.bstmexico.mihabitat_ws.model.Contacto</value>
 				<value>com.bstmexico.mihabitat_ws.model.Catalogo</value>
 				<value>com.bstmexico.mihabitat_ws.model.CatalogoRolUsuarios</value>
+				<value>com.bstmexico.mihabitat_ws.model.Condominio</value>
+				<value>com.bstmexico.mihabitat_ws.model.ContactoDepartamento</value>
+				
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -33,7 +37,6 @@
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
-				
 			</props>
 		</property> 
 	</bean>

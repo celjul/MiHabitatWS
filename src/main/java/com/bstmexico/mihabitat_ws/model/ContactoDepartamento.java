@@ -6,72 +6,63 @@ import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-@Entity
+@Entity 
 @Table(name = "tdepartamentocontactos")
-@AssociationOverrides({
-		@AssociationOverride(name = "id.contacto", joinColumns = 
-				@JoinColumn(name = "NIdPersona")),
-		@AssociationOverride(name = "id.departamento", joinColumns = 
-				@JoinColumn(name = "NIdDepartamento")) })
+
 public class ContactoDepartamento implements Serializable {
 
 	private static final long serialVersionUID = 2467683185271659574L;
-
-	@EmbeddedId
-	private ContactoDepartamentoId id = new ContactoDepartamentoId();
 
 	@NotNull
 	@Column(name = "BHabitante", nullable = false)
 	private Boolean habitante;
 
-	@NotNull
+	@Id
 	@Column(name = "BPrincipal", nullable = false)
 	private Boolean principal;
 
 	@NotNull
-	@Column(name = "BPropietario", nullable = false)
+	@Column(name = "BPropietario", nullable = false,unique=false)
 	private Boolean propietario;
-
 	
+	@Transient
+	@Column(name = "NIdDepartamento")
+	private Long departamento;
+
+	@Transient
+	@Column(name = "NIdPersona")
+	private Long persona;
+
 	public ContactoDepartamento() {
 	}
 
-	public ContactoDepartamentoId getId() {
-		return id;
+	public Long getDepartamento() {
+		return departamento;
 	}
 
-	public void setId(ContactoDepartamentoId id) {
-		this.id = id;
-	}
-	
-	@Transient
-	public Contacto getContacto() {
-		return getId().getContacto();
-	}
-	
-	public void setContacto(Contacto contacto) {
-		getId().setContacto(contacto);
+	public void setDepartamento(Long departamento) {
+		this.departamento = departamento;
 	}
 
-	@Transient
-	public Departamento getDepartamento() {
-		return getId().getDepartamento();
+	public Long getPersona() {
+		return persona;
 	}
 
-	public void setDepartamento(Departamento departamento) {
-		getId().setDepartamento(departamento);
+	public void setPersona(Long persona) {
+		this.persona = persona;
 	}
 
 	public Boolean getHabitante() {
@@ -97,5 +88,5 @@ public class ContactoDepartamento implements Serializable {
 	public void setPropietario(Boolean propietario) {
 		this.propietario = propietario;
 	}
-	
+
 }

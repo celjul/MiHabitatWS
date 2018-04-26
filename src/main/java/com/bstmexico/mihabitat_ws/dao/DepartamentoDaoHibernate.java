@@ -10,4 +10,6 @@ public interface DepartamentoDaoHibernate {
 	
 	public List<Departamentos> list();
 	
+	public List<Departamentos> getbyContacto(Long idUsuario);
+	
 }
