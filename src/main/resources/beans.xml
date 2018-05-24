@@ -8,9 +8,9 @@
    <bean id="dataSource" 
       class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
       <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
-      <property name = "url" value = "jdbc:mysql://104.145.233.100/mihabitat_baserep"/>
-      <property name = "username" value = "mihabitat-demo"/>
-      <property name = "password" value = "J7d/s851hT$9aS4"/>
+      <property name = "url" value = "jdbc:mysql://127.0.0.1/mihabitat"/>
+      <property name = "username" value = "root"/>
+      <property name = "password" value = "root"/>
    </bean>
 
    <!-- Definition for studentJDBCTemplate bean -->
@@ -23,6 +23,11 @@
    
    <bean id = "historicosDao" 
       class = "com.bstmexico.mihabitat_ws.dao.impl.HistoricosDaoImpl">
+      <property name = "dataSource" ref = "dataSource" /> 
+         
+   </bean>
+ <bean id = "loginDao" 
+      class = "com.bstmexico.mihabitat_ws.dao.impl.LoginDaoImpl">
       <property name = "dataSource" ref = "dataSource" /> 
          
    </bean>

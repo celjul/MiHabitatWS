@@ -1,9 +1,9 @@
 package com.bstmexico.mihabitat_ws.dao;
 
-import com.bstmexico.mihabitat_ws.model.Usuarios;
+import com.bstmexico.mihabitat_ws.model.Persona;
 
 public interface LoginDAO  {
 
-	public Usuarios checkLogin(String user,String Password);
+	public Persona checkLogin(String user,String Password);
 	
 }

@@ -8,44 +8,73 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.bstmexico.mihabitat_ws.dao.LoginDAO;
-import com.bstmexico.mihabitat_ws.model.CatalogoRolUsuarios;
-import com.bstmexico.mihabitat_ws.model.Departamentos;
 import com.bstmexico.mihabitat_ws.model.Persona;
-import com.bstmexico.mihabitat_ws.model.Usuarios;
+
 
 
 @Repository("loginDao")
 public class LoginDaoImpl implements LoginDAO {
-	 
-	private SessionFactory sessionFactory;
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-   	   
+	    	   
+	private DataSource dataSource;
+	private JdbcTemplate jdbcTemplateObject;
+	   
+	   public void setDataSource(DataSource dataSource) {
+	      this.dataSource = dataSource;
+	      this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+	   }
+	   
 	@Override
-	public Usuarios checkLogin(String user, String password) {
+	public Persona checkLogin(String user, String password) {
+		Persona persona = new Persona();
+		Connection conn = null;
 
-		Session session = this.sessionFactory.openSession();
-		Query query = session.createQuery("from Usuarios as u where u.user=:usuario and password=:pass");
-		query.setParameter("usuario", user);
-		query.setParameter("pass", convertPassMd5(password));
-		List<Usuarios> listaUsuario = query.list();
-		return listaUsuario.get(0);
+		try {
+			String contrasena;
+			contrasena = convertPassMd5(password);
+			String sql = "select tusuarios.NIdUsuario , tusuarios.VEmail , tusuarios.BActivo , tusuarios.NIdPersona , "+
+					"tpersonas.VNombre , tpersonas.VApellidoPaterno, tpersonas.VApellidoMaterno , "+
+					"tcatalogos.NIdCatalogo from tusuarios,tpersonas,tusuarioroles,tcatalogos where "+
+					"tusuarios.NIdPersona = tpersonas.NIdPersona and tusuarioroles.NIdUsuario = tusuarios.NIdUsuario "+
+					"and tusuarioroles.NIdCatalogo = tcatalogos.NIdCatalogo "+
+					"and VUser = '"+user+"' and VPassword = '"+contrasena+"';";
+			System.out.println(sql);
+			conn = dataSource.getConnection();
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+					persona.setIdUsuario(rs.getInt("NIdUsuario"));
+					persona.setNombre(rs.getString("VNombre"));
+					persona.setApPaterno(rs.getString("VApellidoPaterno"));
+					persona.setApMaterno(rs.getString("VApellidoMaterno"));
+					persona.setEmail(rs.getString("VEmail"));
+					persona.setIdPersona(rs.getInt("NIdPersona"));
+					persona.setbActivo(rs.getInt("BActivo"));	
+					persona.setIdRol(rs.getInt("NIdCatalogo"));
+			}if(rs.first()==false){
+			persona.setIdUsuario(-1);}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+			
+		} 	 finally {
+			if (conn != null) {
+				try {
+				conn.close();
+				} catch (SQLException e) {}
+			}
+		}
+		return persona;
 	}
-	
-	
  	public static String convertPassMd5(String pass) {
 		  String password = null;
 		  MessageDigest mdEnc;
