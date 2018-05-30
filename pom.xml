@@ -101,6 +101,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>mx.openpay</groupId>
+			<artifactId>openpay-api-client</artifactId>
+			<version>1.0.8</version>
+		</dependency>
 		
     </dependencies>
 

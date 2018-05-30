@@ -21,7 +21,7 @@ import com.bstmexico.mihabitat_ws.model.Departamento;
 
 import com.bstmexico.mihabitat_ws.model.PendientesPago;
 import com.bstmexico.mihabitat_ws.model.Persona;
-
+import com.bstmexico.mihabitat_ws.pagos.Pagos;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -132,4 +132,14 @@ class GreetingController {
   	return mapa;   
   }
   
+  @RequestMapping("/getguadartarjeta")
+  public Map getGuardarTarjeta(@RequestParam(value="nombre")String nombre,@RequestParam(value="apPaterno")String apPaterno,@RequestParam(value="apMaterno")String apMaterno,
+		  @RequestParam(value="email")String email,@RequestParam(value="token")String token,@RequestParam(value="monto")String monto,@RequestParam(value="deviceId")String deviceId) {
+	  ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
+	  Map map = new HashMap<>();
+	  Pagos pagos = new Pagos();
+	  pagos.GenerarPago(nombre,apPaterno,apMaterno,email,token,monto,deviceId);
+	  return map;
+  }
+  	
 }
