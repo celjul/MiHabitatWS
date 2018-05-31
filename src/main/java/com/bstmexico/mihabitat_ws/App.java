@@ -133,12 +133,15 @@ class GreetingController {
   }
   
   @RequestMapping("/getguadartarjeta")
-  public Map getGuardarTarjeta(@RequestParam(value="nombre")String nombre,@RequestParam(value="apPaterno")String apPaterno,@RequestParam(value="apMaterno")String apMaterno,
-		  @RequestParam(value="email")String email,@RequestParam(value="token")String token,@RequestParam(value="monto")String monto,@RequestParam(value="deviceId")String deviceId) {
+  public Map getGuardarTarjeta(@RequestParam(value="nombre")String nombre,@RequestParam(value="apPaterno")String apPaterno,
+		  @RequestParam(value="apMaterno")String apMaterno,@RequestParam(value="email")String email,
+		  @RequestParam(value="token")String token,@RequestParam(value="monto")String monto,
+		  @RequestParam(value="deviceId")String deviceId,@RequestParam(value="idDepartamento") String nIdDepartamento,
+		  @RequestParam(value="idUsuario") String nIdUsuario) {
 	  ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 	  Map map = new HashMap<>();
 	  Pagos pagos = new Pagos();
-	  pagos.GenerarPago(nombre,apPaterno,apMaterno,email,token,monto,deviceId);
+	  pagos.GenerarPago(nombre,apPaterno,apMaterno,email,token,monto,deviceId,nIdUsuario,nIdDepartamento);
 	  return map;
   }
   	
