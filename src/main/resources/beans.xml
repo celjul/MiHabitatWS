@@ -15,22 +15,21 @@
 
    <!-- Definition for studentJDBCTemplate bean -->
      
-    <bean id = "departamentoDao" 
-      class = "com.bstmexico.mihabitat_ws.dao.impl.DepartamentoDaoImpl">
-      <property name = "dataSource" ref = "dataSource" /> 
-         
-   </bean>
+	<bean id = "departamentoDao" class = "com.bstmexico.mihabitat_ws.dao.impl.DepartamentoDaoImpl">
+    	<property name = "dataSource" ref = "dataSource" />  
+   	</bean>
    
-   <bean id = "historicosDao" 
-      class = "com.bstmexico.mihabitat_ws.dao.impl.HistoricosDaoImpl">
-      <property name = "dataSource" ref = "dataSource" /> 
-         
-   </bean>
- <bean id = "loginDao" 
-      class = "com.bstmexico.mihabitat_ws.dao.impl.LoginDaoImpl">
-      <property name = "dataSource" ref = "dataSource" /> 
-         
-   </bean>
+   	<bean id = "historicosDao" class = "com.bstmexico.mihabitat_ws.dao.impl.HistoricosDaoImpl">
+      	<property name = "dataSource" ref = "dataSource" /> 
+   	</bean>
+ 
+ 	<bean id = "loginDao" class = "com.bstmexico.mihabitat_ws.dao.impl.LoginDaoImpl">
+      	<property name = "dataSource" ref = "dataSource" />  
+   	</bean>
+
+ 	<bean id = "pagosDao" class = "com.bstmexico.mihabitat_ws.dao.impl.PagosDaoImpl">
+      	<property name = "dataSource" ref = "dataSource" />  
+   	</bean>
 
       
 </beans>

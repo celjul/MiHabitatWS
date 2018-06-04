@@ -13,8 +13,9 @@ public class Pagos {
 	
 	OpenpayAPI api = new OpenpayAPI("https://sandbox-api.openpay.mx", "sk_a502fa18d86447fdbc155aabe75beb95", "mz8cpzsq1p5nyvv1tyny");
 	
-	public void GenerarPago(String nombre,String apPaterno , String apMaterno, String email, 
+	public int GenerarPago(String nombre,String apPaterno , String apMaterno, String email, 
 			String token,String monto,String deviceId,String idUsuario,String nidDepartamento) {
+	int codigo=100;
 		CreateCardChargeParams request = new CreateCardChargeParams();
 		
 		Customer customer = new Customer();
@@ -30,29 +31,17 @@ public class Pagos {
 
 	try {
 		Charge charge = api.charges().create(request);
+		
 		System.out.println(charge.toString());
+		if(charge.getStatus().equals("completed")) {
+			codigo=200;
+		}
 	} catch (OpenpayServiceException | ServiceUnavailableException e) {
-		// TODO Auto-generated catch block
-		/*
-		 * NIdCondominio, NIdContacto ,NIdUsuario,NIdDepartamento;
-
-folio= select max(NFolio) from tpagos where NIdCondominio=nidcondominio
-
-insert into tpagos ( NIdCondominio, NIdContacto, NIdCuenta, DFecha, NFolio, NIdMetodoPago, DMonto) 
-values (nidcondominio,nidcontacto,9,date,folio,612,monto) 
-
-id = SELECT nidpago FROM tpagos ORDER BY nidpago DESC LIMIT 1;
-
-insert into testatuspago (NIdEstatus, NIdUsuario, NIdPago) 
-values (42,idusuario,id);
 	
-insert into tpagosdepartamento (NIdCondominio, NIdDepartamento, DMonto, NIdPago) 
-values (nidcondominio,niddepartamento,monto,id)
-
-insert into tmovimientos (DFecha, DHaber, NIdCuenta, NIdPagoMov, VTipo) 
-values (date,monto,9,id,'pago')
-		 */
 		e.printStackTrace();
+	
 	}
+	return codigo;
+	
 	}
 }

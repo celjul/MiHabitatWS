@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bstmexico.mihabitat_ws.dao.DepartamentoDao;
 import com.bstmexico.mihabitat_ws.dao.HistoricosDao;
 import com.bstmexico.mihabitat_ws.dao.LoginDAO;
-
+import com.bstmexico.mihabitat_ws.dao.PagosDao;
 import com.bstmexico.mihabitat_ws.model.Departamento;
 
 import com.bstmexico.mihabitat_ws.model.PendientesPago;
@@ -63,6 +63,9 @@ class GreetingController {
 	
 	@Autowired
 	private HistoricosDao historicosDao;
+	
+	@Autowired
+	private PagosDao pagosDao;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@RequestMapping("/login")
@@ -141,7 +144,11 @@ class GreetingController {
 	  ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
 	  Map map = new HashMap<>();
 	  Pagos pagos = new Pagos();
-	  pagos.GenerarPago(nombre,apPaterno,apMaterno,email,token,monto,deviceId,nIdUsuario,nIdDepartamento);
+	  int codigo = pagos.GenerarPago(nombre,apPaterno,apMaterno,email,token,monto,deviceId,nIdUsuario,nIdDepartamento);
+	  if(codigo==200) {
+		  pagosDao= (PagosDao) context.getBean("pagosDao");
+		  pagosDao.insertarPago(nIdDepartamento, nIdUsuario, monto);
+	  }
 	  return map;
   }
   	
